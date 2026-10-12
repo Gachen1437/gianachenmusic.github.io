@@ -1,0 +1,17 @@
+{
+  "name": "Gian Achen",
+  "version": "1.0.0",
+  "description": "Artist Website",
+  "main": "index.html",
+  "scripts": {
+    "start": "node server.js",
+    "build:pages": "node scripts/build-pages.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {},
+  "engines": {
+    "node": ">=18"
+  }
+}

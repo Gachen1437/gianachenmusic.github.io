@@ -1,0 +1,993 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Gian Achen | Music</title>
+    <style>
+        :root {
+            --bg: #070708;
+            --bg-2: #111214;
+            --text: #f5f5f5;
+            --muted: #b8b8b8;
+            --gold: #d4af37;
+            --line: rgba(255,255,255,0.08);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        html {
+            scroll-behavior: smooth;
+            scroll-padding-top: 90px;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            background: radial-gradient(circle at top, #17181b 0%, var(--bg) 35%, #050505 100%);
+            color: var(--text);
+            line-height: 1.6;
+        }
+        a { color: inherit; text-decoration: none; }
+        img { max-width: 100%; display: block; }
+
+        .container { width: min(1120px, calc(100% - 32px)); margin: 0 auto; }
+        header {
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            background: rgba(7, 7, 8, 0.85);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--line);
+        }
+        nav {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            min-height: 78px;
+        }
+        .logo {
+            font-size: 1.3rem;
+            font-weight: bold;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: var(--gold);
+        }
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 28px;
+            color: var(--muted);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+        .nav-links a:hover { color: var(--text); }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border: none;
+            border-radius: 999px;
+            padding: 0.9rem 1.6rem;
+            font-weight: 700;
+            transition: 0.2s ease;
+            letter-spacing: 0.04em;
+            cursor: pointer;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, var(--gold), #f0c75e);
+            color: #111;
+        }
+        .btn-primary:hover { transform: translateY(-1px); }
+        .btn-secondary {
+            background: rgba(255,255,255,0.04);
+            border: 1px solid var(--line);
+            color: var(--text);
+        }
+
+        .header-photo {
+            width: 100%;
+            background: #000;
+            border-bottom: 1px solid var(--line);
+            overflow: hidden;
+            perspective: 1200px;
+        }
+        .header-photo img {
+            display: block;
+            width: 100%;
+            height: 620px;
+            object-fit: cover;
+            object-position: center top;
+            transform-origin: center 35%;
+            transform-style: preserve-3d;
+            animation: hero-photo-zoom 18s ease-in-out infinite alternate;
+        }
+        @keyframes hero-photo-zoom {
+            from { transform: translateZ(0) rotateX(0) rotateY(0) scale(1); }
+            to { transform: translateZ(35px) rotateX(0.5deg) rotateY(-1deg) scale(1.03); }
+        }
+        @media (prefers-reduced-motion: reduce) {
+            .header-photo img {
+                animation: none;
+            }
+            .gallery-carousel { scroll-behavior: auto; }
+        }
+
+        .hero { padding: 90px 0 60px; }
+        .hero-grid {
+            display: grid;
+            grid-template-columns: 1.1fr 0.9fr;
+            gap: 40px;
+            align-items: center;
+        }
+        .eyebrow {
+            display: inline-block;
+            color: var(--gold);
+            font-size: 0.75rem;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            margin-bottom: 16px;
+            font-weight: 700;
+        }
+        h1 {
+            font-size: clamp(2.8rem, 7vw, 5.4rem);
+            line-height: 0.96;
+            letter-spacing: -0.06em;
+            margin-bottom: 18px;
+        }
+        .lead {
+            color: var(--muted);
+            font-size: 1.08rem;
+            max-width: 560px;
+            margin-bottom: 28px;
+        }
+        .hero-actions { display: flex; flex-wrap: wrap; gap: 16px; margin-bottom: 38px; }
+        .stats { display: flex; gap: 30px; flex-wrap: wrap; }
+        .stat { display: flex; flex-direction: column; gap: 5px; }
+        .stat strong { font-size: 1.7rem; color: var(--text); }
+        .stat span {
+            color: var(--muted);
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+        }
+
+        .album-card {
+            display: block;
+            color: inherit;
+            background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02));
+            border: 1px solid var(--line);
+            border-radius: 28px;
+            padding: 20px;
+            box-shadow: 0 25px 60px rgba(0,0,0,0.45);
+        }
+        .album-card:hover { border-color: rgba(212,175,55,0.4); }
+        .album-art {
+            height: 430px;
+            border-radius: 22px;
+            background: #111;
+            border: 1px solid var(--line);
+            display: flex;
+            align-items: end;
+            padding: 28px;
+            position: relative;
+            overflow: hidden;
+        }
+        .album-artwork {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .album-art::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(0deg, rgba(0,0,0,0.82), transparent 70%);
+        }
+        .album-info { position: relative; z-index: 1; }
+        .album-tag {
+            display: inline-block;
+            padding: 6px 10px;
+            border-radius: 999px;
+            background: rgba(212,175,55,0.12);
+            border: 1px solid rgba(212,175,55,0.4);
+            color: var(--gold);
+            font-size: 0.72rem;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            margin-bottom: 12px;
+        }
+        .album-info h2 { font-size: 2.3rem; letter-spacing: -0.06em; margin-bottom: 6px; }
+        .album-info p { color: var(--muted); }
+
+        .section { padding: 80px 0; }
+        .section-header { margin-bottom: 28px; }
+        .section-header h3 {
+            font-size: clamp(2rem, 4vw, 3rem);
+            letter-spacing: -0.05em;
+        }
+
+        .bio-block {
+            background: rgba(255,255,255,0.02);
+            border: 1px solid var(--line);
+            border-radius: 22px;
+            padding: 28px;
+            margin-bottom: 28px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.18);
+        }
+
+        .bio-block p {
+            color: var(--muted);
+            font-size: 1.06rem;
+            line-height: 1.9;
+            max-width: 900px;
+        }
+
+        .feature-grid, .release-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 24px;
+        }
+
+        .card {
+            background: rgba(255,255,255,0.02);
+            border: 1px solid var(--line);
+            border-radius: 22px;
+            padding: 28px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.22);
+        }
+        .icon {
+            width: 46px; height: 46px; display: grid; place-items: center;
+            border-radius: 12px;
+            background: rgba(212,175,55,0.12);
+            border: 1px solid rgba(212,175,55,0.4);
+            color: var(--gold);
+            font-weight: bold;
+            margin-bottom: 18px;
+        }
+        .card h4 { font-size: 1.4rem; margin-bottom: 10px; }
+        .card p { color: var(--muted); }
+
+        .release-card { overflow: hidden; }
+        .release-cover {
+            height: 220px;
+            border-radius: 16px;
+            margin-bottom: 18px;
+            background: linear-gradient(135deg, rgba(138,99,255,0.25), rgba(255,77,109,0.2));
+            border: 1px solid var(--line);
+            position: relative;
+        }
+        .release-cover::before {
+            content: "";
+            position: absolute;
+            inset: 18% 20%;
+            border-radius: 50%;
+            border: 1px solid rgba(255,255,255,0.14);
+        }
+        .release-card h4 { margin-bottom: 8px; }
+        .release-card p { color: var(--muted); }
+
+        .gallery-carousel {
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            scrollbar-width: none;
+            border-radius: 18px;
+            aspect-ratio: 16 / 9;
+        }
+        .gallery-carousel::-webkit-scrollbar { display: none; }
+        .gallery-track {
+            display: flex;
+            height: 100%;
+        }
+        .gallery-slide {
+            flex: 0 0 100%;
+            scroll-snap-align: start;
+            height: 100%;
+        }
+        .gallery-slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            border-radius: 18px;
+            border: 1px solid var(--line);
+            background: #111;
+        }
+        .gallery-controls {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            gap: 12px;
+            margin-top: 16px;
+        }
+        .gallery-controls button {
+            background: rgba(255,255,255,0.04);
+            border: 1px solid var(--line);
+            color: var(--text);
+        }
+
+        .press-links {
+            display: grid;
+            gap: 18px;
+            margin-top: 28px;
+        }
+        .press-link {
+            display: block;
+            padding: 0 0 18px;
+            border-bottom: 1px solid var(--line);
+            color: inherit;
+        }
+        .press-link h4 {
+            margin-bottom: 6px;
+            color: var(--gold);
+        }
+        .press-link p {
+            max-width: 850px;
+            color: var(--muted);
+        }
+        .press-link:hover h4 { color: var(--text); }
+        .youtube-video-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 24px;
+        }
+        .youtube-video-card {
+            padding: 0;
+            overflow: hidden;
+        }
+        .youtube-video-card img {
+            display: block;
+            width: 100%;
+            aspect-ratio: 16 / 9;
+            object-fit: cover;
+            background: #111;
+        }
+        .youtube-video-card h4 {
+            padding: 16px 18px 18px;
+            font-size: 1.05rem;
+        }
+        .youtube-videos-message {
+            color: var(--muted);
+        }
+        .youtube-video-card a:hover h4 { color: var(--gold); }
+
+        .player-wrap {
+            padding: 18px;
+            background: rgba(255,255,255,0.02);
+            border: 1px solid var(--line);
+            border-radius: 22px;
+            overflow: hidden;
+        }
+        .player-wrap iframe {
+            width: 100%;
+            height: 456px;
+            border: 0;
+            border-radius: 16px;
+        }
+
+        .shows-widget {
+            background: rgba(255,255,255,0.02);
+            border: 1px solid var(--line);
+            border-radius: 22px;
+            padding: 20px;
+            min-height: 220px;
+        }
+        .shows-widget .bit-widget-initializer {
+            display: block;
+            width: 100%;
+        }
+        .shows-link {
+            margin-top: 18px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.8rem 1.2rem;
+            border-radius: 999px;
+            background: rgba(212,175,55,0.12);
+            border: 1px solid rgba(212,175,55,0.4);
+            color: var(--gold);
+            font-weight: 700;
+        }
+
+        .contact-section { padding: 80px 0 110px; }
+        .contact-box {
+            display: grid;
+            grid-template-columns: 0.9fr 1.1fr;
+            gap: 28px;
+            background: rgba(255,255,255,0.02);
+            border: 1px solid var(--line);
+            border-radius: 24px;
+            padding: 28px;
+        }
+        .contact-copy h3 {
+            font-size: clamp(2rem, 4vw, 2.8rem);
+            letter-spacing: -0.05em;
+            margin-bottom: 14px;
+        }
+        .contact-copy p { color: var(--muted); margin-bottom: 22px; }
+        .contact-links { display: grid; gap: 12px; }
+        .contact-links a { color: var(--gold); }
+
+        .contact-form { display: grid; gap: 16px; }
+        .field { display: grid; gap: 8px; }
+        .field label {
+            color: var(--muted);
+            font-size: 0.8rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+        .field input, .field textarea {
+            width: 100%;
+            background: rgba(255,255,255,0.02);
+            border: 1px solid var(--line);
+            border-radius: 12px;
+            color: var(--text);
+            padding: 0.9rem 1rem;
+            font: inherit;
+        }
+        .field textarea { min-height: 140px; resize: vertical; }
+
+        .cta { padding: 0 0 90px; }
+        .cta-box {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 18px;
+            padding: 26px 30px;
+            border-radius: 26px;
+            background: linear-gradient(135deg, rgba(138,99,255,0.15), rgba(255,77,109,0.1));
+            border: 1px solid var(--line);
+        }
+        .cta-box h3 {
+            font-size: clamp(2rem, 4vw, 2.8rem);
+            letter-spacing: -0.05em;
+        }
+        .cta-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        footer {
+            border-top: 1px solid var(--line);
+            padding: 26px 0 35px;
+            color: var(--muted);
+        }
+        .footer-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 18px;
+        }
+        .footer-links {
+            display: flex;
+            gap: 24px;
+            flex-wrap: wrap;
+        }
+
+        @media (max-width: 900px) {
+            .hero-grid, .feature-grid, .release-grid, .youtube-video-grid, .contact-box { grid-template-columns: 1fr; }
+            .cta-box { flex-direction: column; align-items: flex-start; }
+            .nav { flex-wrap: wrap; justify-content: center; gap: 12px; padding: 14px 0; }
+            .nav-links { order: 3; width: 100%; justify-content: center; }
+        }
+
+        @media (max-width: 560px) {
+            .hero-actions { flex-direction: column; align-items: stretch; }
+            .btn { width: 100%; }
+            .footer-row { flex-direction: column; text-align: center; }
+        }
+    </style>
+</head>
+<body>
+    <div id="top"></div>
+    <header>
+        <div class="container">
+            <nav>
+                <div class="logo">Gian Achen | Singer Songwriter</div>
+                <div class="nav-links">
+                    <a href="#top">Home</a>
+                    <a href="#listen">Listen</a>
+                    <a href="#shows">Shows</a>
+                    <a href="#about">About</a>
+                    <a href="#merch">Merch</a>
+                    <a href="#contact">Contact</a>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <section class="header-photo" aria-label="Gian Achen banner">
+        <img src="./src/assets/Gian1.jpg" alt="Gian Achen">
+    </section>
+
+    <main>
+        <section class="hero">
+            <div class="container hero-grid">
+                <div>
+                    <p class="eyebrow">Welcome</p>
+                    <h1>Gian Achen</h1>
+                    <p class="lead">
+                        Bay Area artist Gian Achen writes nostalgic Americana folk that pairs heartfelt storytelling and resonant melodies with a refreshing callback to the golden era of '60s and '70s songwriters.
+                    </p>
+
+                    <div class="hero-actions">
+                        <a href="https://open.spotify.com/artist/3r60tSvYtUuwXrYS24bvCq?si=NX4PKMH0RL6DwjBJ7YdbwA" target="_blank" rel="noreferrer" class="btn btn-primary">Listen Now</a>
+                        <a href="#follow" class="btn btn-primary">Follow</a>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <section class="section" id="listen">
+            <div class="container">
+                <div class="section-header">
+                    <p class="eyebrow">Music</p>
+                    <h3>Listen</h3>
+                </div>
+
+                <div class="player-wrap">
+                    <iframe
+                        src="https://open.spotify.com/embed/artist/3r60tSvYtUuwXrYS24bvCq?utm_source=generator"
+                        height="456"
+                        allowfullscreen=""
+                        allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+                        loading="lazy">
+                    </iframe>
+                </div>
+
+                <a class="album-card" href="https://www.submithub.com/link/gian-achen-when-the-sun-goes-down" target="_blank" rel="noreferrer" aria-label="Listen to When the Sun Goes Down">
+                    <div class="album-art">
+                        <img class="album-artwork" src="https://i.scdn.co/image/ab67616d0000b2733c8bd569300a23c2ad15b8ea" alt="When the Sun Goes Down album artwork" loading="lazy">
+                        <div class="album-info">
+                            <span class="album-tag">Out now</span>
+                            <h2>When the Sun Goes Down</h2>
+                            <p>Debut album</p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </section>
+
+        <section class="section" id="shows">
+            <div class="container">
+                <div class="section-header">
+                    <p class="eyebrow">Shows</p>
+                    <h3>Upcoming shows</h3>
+                </div>
+
+                <div class="shows-widget">
+                    <script charset="utf-8" src="https://widgetv3.bandsintown.com/main.min.js"></script>
+                    <a
+                        class="bit-widget-initializer"
+                        data-artist-name="id_15665879"
+                        data-app-id="bf7658ac0fd7f64469c2c6b1e012f10c"
+                        data-text-color="#f5f5f5"
+                        data-background-color="transparent"
+                        data-separator-color="#2a2a2a"
+                        data-button-background-color="#d4af37"
+                        data-button-text-color="#111111"
+                        data-button-border-color="transparent"
+                        data-link-color="#d4af37"
+                        data-popup-background-color="#111111"
+                        data-popup-text-color="#ffffff"
+                        data-font="Helvetica"
+                        data-auto-style="true">
+                    </a>
+                </div>
+
+                <a class="shows-link" href="https://bnds.us/8lw3hw" target="_blank" rel="noreferrer">
+                    View all shows
+                </a>
+            </div>
+        </section>
+
+        <section class="section" id="about">
+            <div class="container">
+                <div class="section-header">
+                    <p class="eyebrow">About</p>
+                    <h3>Bay Area singer-songwriter with Folk and Americana Roots</h3>
+                </div>
+
+                <div class="bio-block">
+                    <p>
+                        Bay Area singer-songwriter Gian Achen writes nostalgic Americana folk songs that blend heartfelt storytelling with resonant melodies.
+                        Drawing comparisons to artists like Elliott Smith and Justin Townes Earle, Gian’s music is honest, understated, and a refreshing callback to the golden era of ’60s and ’70s songwriters.
+                        Through his intimate live performances, Gian creates a musical experience that is both familiar and uniquely his own.
+                    </p>
+                </div>
+
+                <div class="feature-grid">
+                    <article class="card">
+                        <div class="icon">01</div>
+                        <h4>Americana roots</h4>
+                        <p>A warm, nostalgic sound shaped by folk storytelling and the timeless spirit of classic singer-songwriters.</p>
+                    </article>
+
+                    <article class="card">
+                        <div class="icon">02</div>
+                        <h4>Honest songwriting</h4>
+                        <p>Every lyric is grounded in real emotion—simple, human, and memorable without trying too hard.</p>
+                    </article>
+
+                    <article class="card">
+                        <div class="icon">03</div>
+                        <h4>Intimate live sets</h4>
+                        <p>His performances feel personal and close, turning every room into a place for reflection and connection.</p>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="container">
+                <div class="section-header">
+                    <p class="eyebrow">Gallery</p>
+                    <h3>Photos & press moments</h3>
+                </div>
+
+                <div class="gallery-carousel" id="galleryCarousel" role="region" aria-roledescription="carousel" aria-label="Gian Achen photo gallery">
+                    <div class="gallery-track">
+                        <div class="gallery-slide" role="group" aria-roledescription="slide" aria-label="1 of 6"><img src="./src/assets/gallery/DSC00421.jpg" alt="Gian Achen gallery photo: DSC00421"></div>
+                        <div class="gallery-slide" role="group" aria-roledescription="slide" aria-label="2 of 6"><img src="./src/assets/gallery/Gian3.jpg" alt="Gian Achen gallery photo 1"></div>
+                        <div class="gallery-slide" role="group" aria-roledescription="slide" aria-label="3 of 6"><img src="./src/assets/gallery/Gian4.jpg" alt="Gian Achen gallery photo 2"></div>
+                        <div class="gallery-slide" role="group" aria-roledescription="slide" aria-label="4 of 6"><img src="./src/assets/gallery/Gian5.jpg" alt="Gian Achen gallery photo 3"></div>
+                        <div class="gallery-slide" role="group" aria-roledescription="slide" aria-label="5 of 7"><img src="./src/assets/gallery/DSC00068.jpg" alt="Gian Achen gallery photo: DSC00068"></div>
+                        <div class="gallery-slide" role="group" aria-roledescription="slide" aria-label="6 of 7"><img src="./src/assets/gallery/IMG_20260826_232704_918%20(1).jpg" alt="Gian Achen gallery photo: IMG 20260826 232704 918 (1)"></div>
+                        <div class="gallery-slide" role="group" aria-roledescription="slide" aria-label="7 of 7"><img src="./src/assets/gallery/IMG_20260826_232724_164%20(1).jpg" alt="Gian Achen gallery photo: IMG 20260826 232724 164 (1)"></div>
+                    </div>
+                </div>
+                <p id="galleryStatus" class="youtube-videos-message" role="status" aria-live="polite"></p>
+                <div class="gallery-controls" role="group" aria-label="Gallery controls">
+                    <button class="btn" type="button" id="galleryPrevious" aria-label="Previous photo">Previous</button>
+                    <button class="btn" type="button" id="galleryPause" aria-label="Pause slideshow">Pause</button>
+                    <button class="btn" type="button" id="galleryNext" aria-label="Next photo">Next</button>
+                </div>
+                <div class="press-links">
+                    <a class="press-link" href="https://introvertdisco.com/2025/06/14/luv-gian-achen/" target="_blank" rel="noreferrer">
+                        <h4>Introvert Disco — “LUV” by Gian Achen</h4>
+                        <p>A warm, nostalgic love song with classic influences and a memorable middle eight.</p>
+                    </a>
+                    <a class="press-link" href="https://newindieradar.com/post/785861802738204672/neuerscheinung-luv-von-gian-achen" target="_blank" rel="noreferrer">
+                        <h4>New Indie Radar — “LUV” release spotlight</h4>
+                        <p>The German-language feature highlights the track’s folk, country, and Americana roots, along with its warm guitar sound.</p>
+                    </a>
+                    <a class="press-link" href="https://dulaxi.com/gian-achen-luv-review-a-cinematic-and-heartfelt-debut-that-redefines-the-art-of-the-modern-love-song/" target="_blank" rel="noreferrer">
+                        <h4>DulaXi — “LUV” review</h4>
+                        <p>The review introduces Gian Achen’s Bay Area roots and describes “LUV” as an intimate, cinematic love song.</p>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <section class="section" id="videos">
+            <div class="container">
+                <div class="section-header">
+                    <p class="eyebrow">YouTube</p>
+                    <h3>Latest videos</h3>
+                </div>
+                <div id="youtubeVideosMessage" class="youtube-videos-message" role="status" aria-live="polite">
+                    Loading the latest videos...
+                </div>
+                <div id="youtubeVideos" class="youtube-video-grid"></div>
+            </div>
+        </section>
+
+        <section class="section" id="merch">
+            <div class="container">
+                <div class="section-header">
+                    <p class="eyebrow">Merch</p>
+                    <h3>Support the music.</h3>
+                </div>
+
+                <div class="card merch-card">
+                    <div>
+                        <h4>Official merch</h4>
+                        <p>Shop limited drops, apparel, and music essentials from the official Gian Achen store.</p>
+                    </div>
+
+                    <a
+                        class="btn btn-primary"
+                        href="https://elasticstage.com/gianachenmusic"
+                        target="_blank"
+                        rel="noreferrer"
+                    >
+                        Shop Merch
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <section class="contact-section" id="contact">
+            <div class="container contact-box">
+                <div class="contact-copy">
+                    <p class="eyebrow">Contact</p>
+                    <h3>Book a show or send a message.</h3>
+                    <p>For bookings, collaborations, and press inquiries, reach out directly.</p>
+
+                    <div class="contact-links">
+                        <a href="mailto:gianachenaudio@gmail.com">gianachenaudio@gmail.com</a>
+                        <a href="https://www.instagram.com/gian.achen.music" target="_blank" rel="noreferrer">Instagram</a>
+                        <a href="https://www.facebook.com/gian.achen" target="_blank" rel="noreferrer">Facebook</a>
+                    </div>
+                </div>
+
+                <form class="contact-form" id="contactForm">
+                    <div class="field">
+                        <label for="name">Name</label>
+                        <input id="name" name="name" type="text" placeholder="Your name" required />
+                    </div>
+
+                    <div class="field">
+                        <label for="email">Email</label>
+                        <input id="email" name="email" type="email" placeholder="Your email" required />
+                    </div>
+
+                    <div class="field">
+                        <label for="subject">Subject</label>
+                        <input id="subject" name="subject" type="text" placeholder="Booking / Press / Other" required />
+                    </div>
+
+                    <div class="field">
+                        <label for="message">Message</label>
+                        <textarea id="message" name="message" placeholder="Tell me about your project or event..." required></textarea>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">Send Message</button>
+                </form>
+            </div>
+        </section>
+
+        <section class="cta" id="follow">
+            <div class="container cta-box">
+                <h3>Give me a follow</h3>
+                <div class="cta-links">
+                    <a href="https://www.instagram.com/gian.achen.music" target="_blank" rel="noreferrer" class="btn btn-primary">Instagram</a>
+                    <a href="https://www.tiktok.com/@gianachenmusic" target="_blank" rel="noreferrer" class="btn btn-primary">TikTok</a>
+                    <a href="https://www.facebook.com/gian.achen" target="_blank" rel="noreferrer" class="btn btn-primary">Facebook</a>
+                    <a href="https://youtube.com/@gianachenmusic" target="_blank" rel="noreferrer" class="btn btn-primary">YouTube</a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container footer-row">
+            <p>&copy; Gian Achen</p>
+            <div class="footer-links">
+                <a href="https://www.instagram.com/gian.achen.music" target="_blank" rel="noreferrer">Instagram</a>
+                <a href="https://youtube.com/@gianachenmusic" target="_blank" rel="noreferrer">YouTube</a>
+                <a href="https://www.tiktok.com/@gianachenmusic" target="_blank" rel="noreferrer">TikTok</a>
+                <a href="https://open.spotify.com/artist/3r60tSvYtUuwXrYS24bvCq?si=NX4PKMH0RL6DwjBJ7YdbwA" target="_blank" rel="noreferrer">Spotify</a>
+                <a href="https://www.facebook.com/gian.achen" target="_blank" rel="noreferrer">Facebook</a>
+                <a href="https://gianachenmusic.bandcamp.com/" target="_blank" rel="noreferrer">Bandcamp</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        const gallery = document.getElementById('galleryCarousel');
+        const galleryPrevious = document.getElementById('galleryPrevious');
+        const galleryNext = document.getElementById('galleryNext');
+        const galleryPause = document.getElementById('galleryPause');
+        const reduceGalleryMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+        let gallerySlides = Array.from(gallery.querySelectorAll('.gallery-slide'));
+        let galleryImageSources = gallerySlides.map(slide => slide.querySelector('img').getAttribute('src'));
+        let currentGallerySlide = 0;
+        let galleryTimer;
+        let galleryPaused = reduceGalleryMotion.matches;
+        let isLoadingGalleryImages = false;
+
+        function updateGalleryControls() {
+            const hasMultipleSlides = gallerySlides.length > 1;
+            galleryPrevious.disabled = !hasMultipleSlides;
+            galleryNext.disabled = !hasMultipleSlides;
+            galleryPause.disabled = !hasMultipleSlides;
+        }
+
+        async function fetchSiteData(staticPath, apiPath) {
+            const staticResponse = await fetch(staticPath, { cache: 'no-store' });
+            if (staticResponse.ok) return staticResponse;
+            return fetch(apiPath, { cache: 'no-store' });
+        }
+
+        async function loadGalleryImages() {
+            if (isLoadingGalleryImages) return;
+            isLoadingGalleryImages = true;
+
+            try {
+                const response = await fetchSiteData('./data/gallery-images.json', '/api/gallery-images');
+                if (!response.ok) {
+                    throw new Error(`Gallery image request failed (${response.status}).`);
+                }
+
+                const images = await response.json();
+                if (!Array.isArray(images) || images.some(image =>
+                    typeof image.src !== 'string' || typeof image.alt !== 'string'
+                )) {
+                    throw new Error('Gallery image response had an unexpected format.');
+                }
+
+                const newSources = images.map(image => image.src);
+                if (newSources.length === galleryImageSources.length &&
+                    newSources.every((src, index) => src === galleryImageSources[index])) {
+                    document.getElementById('galleryStatus').textContent = '';
+                    return;
+                }
+
+                const slides = document.createDocumentFragment();
+                for (const [index, image] of images.entries()) {
+                    const slide = document.createElement('div');
+                    slide.className = 'gallery-slide';
+                    slide.setAttribute('role', 'group');
+                    slide.setAttribute('aria-roledescription', 'slide');
+                    slide.setAttribute('aria-label', `${index + 1} of ${images.length}`);
+
+                    const photo = document.createElement('img');
+                    photo.src = image.src;
+                    photo.alt = image.alt;
+                    photo.loading = index === 0 ? 'eager' : 'lazy';
+                    slide.appendChild(photo);
+                    slides.appendChild(slide);
+                }
+
+                gallery.querySelector('.gallery-track').replaceChildren(slides);
+                gallerySlides = Array.from(gallery.querySelectorAll('.gallery-slide'));
+                galleryImageSources = newSources;
+                currentGallerySlide = 0;
+                gallery.scrollLeft = 0;
+                document.getElementById('galleryStatus').textContent = '';
+                updateGalleryControls();
+                startGalleryRotation();
+            } catch (error) {
+                console.error('Unable to load gallery images:', error);
+                document.getElementById('galleryStatus').textContent =
+                    'Automatic gallery updates are unavailable. Check the deployment or server configuration and reload the page.';
+                updateGalleryControls();
+                startGalleryRotation();
+            } finally {
+                isLoadingGalleryImages = false;
+            }
+        }
+
+        function showGallerySlide(index) {
+            if (gallerySlides.length === 0) return;
+            currentGallerySlide = (index + gallerySlides.length) % gallerySlides.length;
+            gallery.scrollTo({
+                left: gallerySlides[currentGallerySlide].offsetLeft,
+                behavior: reduceGalleryMotion.matches ? 'auto' : 'smooth'
+            });
+        }
+
+        function stopGalleryRotation() {
+            window.clearInterval(galleryTimer);
+            galleryTimer = undefined;
+        }
+
+        function startGalleryRotation() {
+            stopGalleryRotation();
+            if (galleryPaused || document.hidden || gallerySlides.length < 2) return;
+            galleryTimer = window.setInterval(() => {
+                showGallerySlide(currentGallerySlide + 1);
+            }, 5000);
+        }
+
+        galleryPrevious.addEventListener('click', () => {
+            showGallerySlide(currentGallerySlide - 1);
+            startGalleryRotation();
+        });
+        galleryNext.addEventListener('click', () => {
+            showGallerySlide(currentGallerySlide + 1);
+            startGalleryRotation();
+        });
+        galleryPause.addEventListener('click', () => {
+            galleryPaused = !galleryPaused;
+            galleryPause.textContent = galleryPaused ? 'Play' : 'Pause';
+            galleryPause.setAttribute('aria-label', galleryPaused ? 'Resume slideshow' : 'Pause slideshow');
+            startGalleryRotation();
+        });
+        gallery.addEventListener('scroll', () => {
+            currentGallerySlide = Math.round(gallery.scrollLeft / gallery.clientWidth);
+        }, { passive: true });
+        gallery.addEventListener('mouseenter', stopGalleryRotation);
+        gallery.addEventListener('mouseleave', startGalleryRotation);
+        gallery.addEventListener('focusin', stopGalleryRotation);
+        gallery.addEventListener('focusout', startGalleryRotation);
+        document.addEventListener('visibilitychange', startGalleryRotation);
+        reduceGalleryMotion.addEventListener('change', event => {
+            galleryPaused = event.matches;
+            galleryPause.textContent = galleryPaused ? 'Play' : 'Pause';
+            galleryPause.setAttribute('aria-label', galleryPaused ? 'Resume slideshow' : 'Pause slideshow');
+            updateGalleryControls();
+            startGalleryRotation();
+        });
+        startGalleryRotation();
+        loadGalleryImages();
+        window.setInterval(loadGalleryImages, 30 * 1000);
+
+        let isLoadingYouTubeVideos = false;
+
+        async function loadYouTubeVideos() {
+            const message = document.getElementById('youtubeVideosMessage');
+            const container = document.getElementById('youtubeVideos');
+            if (isLoadingYouTubeVideos) return;
+            isLoadingYouTubeVideos = true;
+
+            try {
+                const response = await fetchSiteData('./data/youtube-videos.json', '/api/youtube-videos');
+                if (!response.ok) {
+                    throw new Error(`YouTube video request failed (${response.status}).`);
+                }
+
+                const videos = await response.json();
+                if (!Array.isArray(videos)) {
+                    throw new Error('YouTube video response had an unexpected format.');
+                }
+
+                if (videos.length === 0) {
+                    if (container.childElementCount === 0) {
+                        message.textContent = 'No YouTube videos are available yet.';
+                    }
+                    return;
+                }
+
+                const cards = document.createDocumentFragment();
+                for (const item of videos) {
+                    const card = document.createElement('article');
+                    card.className = 'card youtube-video-card';
+
+                    const link = document.createElement('a');
+                    link.href = item.permalink;
+                    link.target = '_blank';
+                    link.rel = 'noreferrer';
+                    link.setAttribute('aria-label', `Watch ${item.title} on YouTube`);
+
+                    const thumbnail = document.createElement('img');
+                    thumbnail.src = item.thumbnail;
+                    thumbnail.alt = '';
+                    thumbnail.loading = 'lazy';
+                    link.appendChild(thumbnail);
+
+                    const title = document.createElement('h4');
+                    title.textContent = item.title;
+                    link.appendChild(title);
+                    card.appendChild(link);
+                    cards.appendChild(card);
+                }
+
+                container.replaceChildren(cards);
+                message.textContent = '';
+            } catch (error) {
+                console.error('Unable to load YouTube videos:', error);
+                if (container.childElementCount === 0) {
+                    message.textContent = 'YouTube videos could not be loaded right now.';
+                } else {
+                    message.textContent = 'Could not refresh videos. Showing the last loaded videos.';
+                }
+            } finally {
+                isLoadingYouTubeVideos = false;
+            }
+        }
+
+        loadYouTubeVideos();
+        window.setInterval(loadYouTubeVideos, 5 * 60 * 1000);
+
+        document.getElementById('contactForm').addEventListener('submit', function (event) {
+            event.preventDefault();
+
+            const name = document.getElementById('name').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const subject = document.getElementById('subject').value.trim();
+            const message = document.getElementById('message').value.trim();
+
+            const mailto = `mailto:gianachenaudio@gmail.com?subject=${encodeURIComponent(subject || 'Website Inquiry')}&body=${encodeURIComponent(
+                `Name: ${name}\nEmail: ${email}\n\nMessage:\n${message}`
+            )}`;
+
+            window.location.href = mailto;
+            this.reset();
+        });
+    </script>
+</body>
+</html>
